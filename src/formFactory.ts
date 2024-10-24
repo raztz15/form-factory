@@ -1,6 +1,11 @@
 import { IFormField } from "./interfaces";
 
-// Function to create form dynamically with different inputs from the inputs data
+/**
+ * Creates a form field dynamically based on the provided field configuration.
+ *
+ * @param {IFormField} field - The field configuration object that specifies the type, label, and other properties of the form field.
+ * @returns {HTMLElement} - The created form field wrapped in a div container with its associated label.
+ */
 export function createFormField(field: IFormField): HTMLElement {
 
     const { type, required, label, defaultValue, validation, id } = field
@@ -67,6 +72,7 @@ export function createFormField(field: IFormField): HTMLElement {
 
     inputElement.id = id
 
+    // Dynamically adding labels to each input
     const labelElement = document.createElement('label')
     labelElement.htmlFor = id
     labelElement.textContent = label + ":"
