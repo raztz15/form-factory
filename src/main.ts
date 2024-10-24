@@ -5,7 +5,7 @@ import { createFormField } from './formFactory';
 
 const fields: IFormField[] = formJson.fields as IFormField[];
 
-
+// Wait until the DOM is fully loaded before rendering the form
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app')
     if (appContainer) {
@@ -13,16 +13,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 })
 
+// Function to render the form
 function renderForm(appContainer: HTMLElement): void {
+    // Create and render the form container
     const form = document.createElement('form')
     form.className = 'form-container';
     form.id = 'form-container';
 
+    // Loop through each field in the form data and create form fields
     fields.forEach(field => {
         const fieldElement = createFormField(field)
         form.appendChild(fieldElement)
     })
 
+    // Add form buttons (submit and reset)
     const buttonsContainer = document.createElement('div');
     buttonsContainer.className = 'form-buttons';
 
