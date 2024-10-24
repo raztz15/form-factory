@@ -3,6 +3,7 @@ import formJson from './formData.json';
 import { IFormField } from "./interfaces";
 import { createFormField } from './formFactory';
 import { handleSubmit } from "./formValidations";
+import { populateFormFieldsWithSavedData } from "./getLocalStorageData";
 
 const fields: IFormField[] = formJson.fields as IFormField[];
 
@@ -65,7 +66,27 @@ function renderForm(appContainer: HTMLElement): void {
     fields.forEach(field => {
         const fieldElement = createFormField(field)
         form.appendChild(fieldElement)
+
+        const { id, type, fields: nestedFields } = field
+
+        // Add event listener to save data to localStorage
+        fieldElement.addEventListener('input', (e) => {
+            const inputElement = e.target as HTMLInputElement | HTMLSelectElement;
+            if (type === 'group' && nestedFields) {
+                const groupData: Record<string, any> = {}
+                nestedFields.forEach(({ id: nestedId }) => {
+                    const nestedInputElement = document.getElementById(nestedId) as HTMLInputElement | HTMLSelectElement;
+                    if (nestedInputElement) {
+                        groupData[nestedId] = nestedInputElement.value
+                    }
+                })
+                localStorage.setItem(id, JSON.stringify(groupData))
+            } else {
+                localStorage.setItem(id, inputElement.value)
+            }
+        })
     })
+
 
     // Add form buttons (submit and reset)
     const buttonsContainer = document.createElement('div');
@@ -79,10 +100,25 @@ function renderForm(appContainer: HTMLElement): void {
     resetButton.type = 'reset';
     resetButton.textContent = 'Reset';
 
+    // Clear localStorage on reset
+    resetButton.addEventListener('click', () => {
+        fields.forEach(({ id, type, fields: nestedFields }) => {
+            localStorage.removeItem(id)
+            if (type === 'group' && nestedFields) {
+                nestedFields.forEach(({ id }) => {
+                    localStorage.removeItem(id)
+                })
+            }
+        })
+    })
+
     buttonsContainer.appendChild(submitButton);
     buttonsContainer.appendChild(resetButton);
     form.appendChild(buttonsContainer);
 
     form.addEventListener('submit', (event) => handleSubmit(event, fields));
     appContainer.appendChild(form);
+
+    // Now that the fields are rendered, populate them with values from localStorage
+    populateFormFieldsWithSavedData()
 }
