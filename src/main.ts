@@ -2,6 +2,7 @@ import "./style.css"
 import formJson from './formData.json';
 import { IFormField } from "./interfaces";
 import { createFormField } from './formFactory';
+import { handleSubmit } from "./formValidations";
 
 const fields: IFormField[] = formJson.fields as IFormField[];
 
@@ -42,5 +43,6 @@ function renderForm(appContainer: HTMLElement): void {
     buttonsContainer.appendChild(resetButton);
     form.appendChild(buttonsContainer);
 
+    form.addEventListener('submit', (event) => handleSubmit(event, fields));
     appContainer.appendChild(form);
 }
