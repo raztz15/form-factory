@@ -6,9 +6,17 @@ import { handleSubmit } from "./formValidations";
 
 const fields: IFormField[] = formJson.fields as IFormField[];
 
+let loading = true;
+let error: string | null = null
+
 // Wait until the DOM is fully loaded before rendering the form
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app')
+
+    if (loading) {
+        const loadingElement = document.createElement('h1')
+        loadingElement.textContent = 'Loading...'
+    }
     if (appContainer) {
         renderForm(appContainer)
     }
