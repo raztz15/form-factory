@@ -20,6 +20,9 @@ export function populateFormFieldsWithSavedData() {
         } else if (savedValue) {
             const inputElement = document.getElementById(id) as HTMLInputElement | HTMLSelectElement;
             if (inputElement) {
+                if (type === 'checkbox') {
+                    (inputElement as HTMLInputElement).checked = JSON.parse(savedValue)
+                }
                 inputElement.value = savedValue;  // Set the saved value
             }
         }

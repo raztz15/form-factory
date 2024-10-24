@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Simulate a delay (e.g., fetching data), and randomly introduce an error for demonstration
         setTimeout(() => {
-            if (Math.random() < .5) {
+            if (Math.random() < .2) {
                 error = 'Failed to load the form. Please try again later.';
                 loading = false;
                 renderForm(appContainer); // Re-render form with error state
@@ -82,7 +82,11 @@ function renderForm(appContainer: HTMLElement): void {
                 })
                 localStorage.setItem(id, JSON.stringify(groupData))
             } else {
-                localStorage.setItem(id, inputElement.value)
+                if (type === 'checkbox') {
+                    localStorage.setItem(id, (inputElement as HTMLInputElement).checked.toString())
+                } else {
+                    localStorage.setItem(id, inputElement.value)
+                }
             }
         })
     })
