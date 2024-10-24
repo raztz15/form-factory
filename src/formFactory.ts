@@ -103,6 +103,10 @@ export function createFormField(field: IFormField): HTMLElement {
     }
 
     if (!inputElement) {
+        const errorTypeMessageElement = document.createElement('h1')
+        errorTypeMessageElement.textContent = `Unable to create input element for field type: ${type}`
+        errorTypeMessageElement.style.color = 'red'
+        document.getElementById('app')?.appendChild(errorTypeMessageElement)
         throw new Error(`Unable to create input element for field type: ${type}`);
     }
 
