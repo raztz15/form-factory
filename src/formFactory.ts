@@ -1,4 +1,5 @@
 import { IFormField } from "./interfaces";
+import { clearValidationErrors, handleValidationError } from "./Utils";
 
 /**
  * Creates a form field dynamically based on the provided field configuration.
@@ -22,16 +23,32 @@ export function createFormField(field: IFormField): HTMLElement {
             inputElementTyped.required = required || false
             inputElementTyped.placeholder = label
 
+            inputElement.addEventListener('input', () => {
+                if (required && !inputElementTyped.value) {
+                    handleValidationError(inputElementTyped, `${field.label} is required.`)
+                } else {
+                    clearValidationErrors(inputElementTyped)
+                }
+            })
+
             if (defaultValue !== undefined) {
                 inputElementTyped.defaultValue = defaultValue.toString()
             }
 
             if (validation?.pattern) {
                 inputElementTyped.pattern = validation.pattern
+                inputElement.addEventListener('input', () => {
+                    const message = 'Please match the requested format'
+                    handleValidationError(inputElementTyped, message)
+                })
             }
 
             if (validation?.min) {
                 inputElementTyped.min = validation.min.toString()
+                inputElement.addEventListener('input', () => {
+                    const message = `Please insert a number that is between ${field.validation?.min} and ${field.validation?.max}`
+                    handleValidationError(inputElementTyped, message)
+                })
             }
 
             if (field.validation?.max) {
@@ -49,6 +66,10 @@ export function createFormField(field: IFormField): HTMLElement {
                 optionElement.value = option
                 optionElement.textContent = option
                 selectElementTyped.appendChild(optionElement)
+            })
+
+            inputElement.addEventListener('change', () => {
+                clearValidationErrors(inputElement as HTMLSelectElement)
             })
             break;
 

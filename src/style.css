@@ -14,6 +14,19 @@ label {
   min-width: 150px;
 }
 
+/*error messages style */
+.input-type-error-message {
+  color: red;
+  font-weight: 600;
+}
+
+.error-message {
+  color: red;
+  font-weight: 600;
+  padding: 5px;
+}
+/*error messages style */
+
 .form-buttons {
   display: flex;
   gap: 10px;
