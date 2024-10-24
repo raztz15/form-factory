@@ -12,18 +12,50 @@ let error: string | null = null
 // Wait until the DOM is fully loaded before rendering the form
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app')
-
-    if (loading) {
-        const loadingElement = document.createElement('h1')
-        loadingElement.textContent = 'Loading...'
-    }
     if (appContainer) {
-        renderForm(appContainer)
+        // Display a loading message if the form is still loading
+        if (loading) {
+            const loadingElement = document.createElement('h1')
+            loadingElement.textContent = 'Loading...'
+            loadingElement.id = 'loading';
+            appContainer.appendChild(loadingElement);
+        } else {
+            // Render the form once loading is complete
+            renderForm(appContainer)
+        }
+
+        // Simulate a delay (e.g., fetching data), and randomly introduce an error for demonstration
+        setTimeout(() => {
+            if (Math.random() < .5) {
+                error = 'Failed to load the form. Please try again later.';
+                loading = false;
+                renderForm(appContainer); // Re-render form with error state
+                return;
+            } else {
+                loading = false
+                renderForm(appContainer) // Re-render form once data is loaded
+            }
+        }, 2000);
     }
 })
 
 // Function to render the form
 function renderForm(appContainer: HTMLElement): void {
+    // Remove the loading message once loading is complete
+    const loadingElement = document.getElementById('loading');
+    if (loadingElement) {
+        loadingElement.remove();
+    }
+
+    // If there's an error, display it and stop further rendering
+    if (error) {
+        const errorElement = document.createElement('h1');
+        errorElement.className = 'error-message';
+        errorElement.textContent = error;
+        appContainer.appendChild(errorElement);
+        return;
+    }
+
     // Create and render the form container
     const form = document.createElement('form')
     form.className = 'form-container';
