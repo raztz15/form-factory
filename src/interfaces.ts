@@ -1,6 +1,6 @@
 export interface IFormField {
     id: string;
-    type: 'text' | 'number' | 'select' | 'checkbox' | 'email';
+    type: 'text' | 'number' | 'select' | 'checkbox' | 'email' | 'group';
     label: string;
     required?: boolean;
     validation?: {

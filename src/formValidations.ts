@@ -56,10 +56,14 @@ function getFormData(formFields: IFormField[]): Record<string, any> {
     const formData: Record<string, any> = {} // Initialize an empty object to hold form data
 
     // Loop through each form field to gather its value
-    formFields.forEach(({ id, type }) => {
+    formFields.forEach(({ id, type, fields: nestedFields }) => {
         const inputElement = document.getElementById(id) as HTMLInputElement | HTMLSelectElement
 
-        if (inputElement) {
+        // If the field is a group (nested form), recursively collect data for nested fields
+        if (type === 'group' && nestedFields) {
+            formData[id] = getFormData(nestedFields)
+            // For regular fields, collect the value or checked state for checkboxes
+        } else if (inputElement) {
             if (type === 'checkbox') {
                 formData[id] = (inputElement as HTMLInputElement).checked
             } else {

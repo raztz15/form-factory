@@ -27,6 +27,12 @@ label {
 }
 /*error messages style */
 
+fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .form-buttons {
   display: flex;
   gap: 10px;

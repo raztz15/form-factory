@@ -26,6 +26,31 @@
         "options": ["Developer", "Designer", "Manager"]
       },
       "required": true
+    },
+    {
+      "id": "address",
+      "label": "Address",
+      "type": "group",
+      "fields": [
+        {
+          "id": "street",
+          "type": "text",
+          "label": "Street",
+          "required": true
+        },
+        {
+          "id": "city",
+          "type": "text",
+          "label": "City",
+          "required": true
+        },
+        {
+          "id": "zip",
+          "type": "number",
+          "label": "Zip Code",
+          "required": true
+        }
+      ]
     }
   ]
 }

@@ -9,8 +9,23 @@ import { clearValidationErrors, handleValidationError } from "./Utils";
  */
 export function createFormField(field: IFormField): HTMLElement {
 
-    const { type, required, label, defaultValue, validation, id } = field
+    const { type, required, label, defaultValue, validation, id, fields: nestedFields } = field
     let inputElement: HTMLElement | null = null
+
+    if (type === 'group') {
+        // Create container for the group fields
+        const groupContainer = document.createElement('fieldset')
+        const groupLabel = document.createElement('legend')
+        groupLabel.textContent = label
+        groupContainer.appendChild(groupLabel)
+
+        nestedFields?.forEach(nestedField => {
+            const nestedFieldElement = createFormField(nestedField)
+            groupContainer.appendChild(nestedFieldElement)
+        })
+
+        return groupContainer // Return the entire group container with nested fields
+    }
 
     // Dynamically creating input field by its type
     switch (type) {
